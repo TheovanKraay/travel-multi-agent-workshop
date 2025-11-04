@@ -119,6 +119,8 @@ hooks:
       interactive: true
       continueOnError: false
       run: |
+        $ErrorActionPreference = 'Continue'
+        
         echo "
         COSMOSDB_ENDPOINT=""$env:COSMOSDB_ENDPOINT""
         COSMOS_KEY=""$env:COSMOS_KEY""
@@ -191,3 +193,5 @@ hooks:
         Write-Host "✅ Setup complete!"
         Write-Host ""
         Write-Host "═══════════════════════════════════════════════════════════════"
+        
+        exit 0
