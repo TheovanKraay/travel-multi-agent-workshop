@@ -1095,7 +1095,7 @@ After creating the itinerary:
 
 #### Update Hotel Agent Prompt
 
-Open `hotel_agent.prompty` and replace its content:
+Open the empty `hotel_agent.prompty` and paste the following content:
 
 ```text
 ---
@@ -1201,7 +1201,7 @@ You: "You're welcome! Let me know if you need anything else for your Barcelona t
 
 #### Create Dining Agent Prompt
 
-Create a new file `dining_agent.prompty`:
+Open the empty `dining_agent.prompty` and paste the following content:
 
 ```text
 ---
@@ -1302,7 +1302,7 @@ You: "Great choice! Flax & Kale is wonderful. Anything else you need for your tr
 
 #### Create Activity Agent Prompt
 
-Create a new file `activity_agent.prompty`:
+Open the empty `activity_agent.prompty` and paste the following content:
 
 ```text
 ---
@@ -1406,20 +1406,20 @@ With the activities in this module complete, it is time to test your work!
 
 Since we added new tools to the MCP server, we need to restart it to load the changes. The backend API and frontend will automatically reload thanks to watchfiles.
 
-**In Terminal 1 (MCP Server):**
+**In Terminal 1 with MCP Server:**
 
 1. Press `Ctrl + C` to stop the MCP server
 2. Restart it with:
 
 ```bash
-python -m mcp_server.mcp_http_server
+$env:PYTHONPATH="../python"; python mcp_http_server.py
 ```
 
 **Backend API (Terminal 2)** - No action needed. Watchfiles will auto-reload changes.
 
 **Frontend (Terminal 3)** - No action needed. Angular dev server auto-reloads.
 
-Open your browser to http://localhost:4200 and start a new conversation:
+Open your browser to http://localhost:4200 and start a new conversation (you may need to log out and log back in to reset the session):
 
 ```text
 Find hotels in Rome
