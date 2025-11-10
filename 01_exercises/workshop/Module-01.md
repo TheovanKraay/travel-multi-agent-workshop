@@ -126,7 +126,9 @@ import logging
 import os
 import uuid
 from typing import Literal
-from langchain_core.messages import AIMessage, SystemMessage, ToolMessage
+from langchain_core.messages import AIMessage
+from langchain_mcp_adapters.client import MultiServerMCPClient
+from langchain_mcp_adapters.tools import load_mcp_tools
 from langgraph.graph import StateGraph, START, MessagesState
 from langgraph.prebuilt import create_react_agent
 from langgraph.types import Command, interrupt
@@ -813,7 +815,7 @@ After creating the itinerary:
 
 ### Update our Workflow
 
-Finally, we need to add the new customer support agent node to the **StateGraph** workflow.
+Finally, we need to add the new itinerary generator agent node to the **StateGraph** workflow.
 
 In your IDE, navigate back to the `travel_agents.py` file.
 
