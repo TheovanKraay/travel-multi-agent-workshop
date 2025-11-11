@@ -1360,12 +1360,25 @@ Since we added new tools to the MCP server, we need to restart it to load the ch
 
 **In Terminal 1 (MCP Server):**
 
-1. Close MCP server terminal
-2. Open new terminal and restart it with:
+1. Stop the currently running MCP server (press `Ctrl+C` in the terminal)
+2. Restart it with the commands below:
+
+> **Important**: Always ensure your virtual environment is activated before starting the server!
+
+**Linux/Mac/WSL/Codespaces:**
+
+```bash
+cd multi-agent-workshop/01_exercises
+source venv/bin/activate
+cd mcp_server
+PYTHONPATH="../python" python mcp_http_server.py
+```
+
+**Windows (PowerShell/CMD):**
 
 ```powershell
 cd multi-agent-workshop\01_exercises
-venv\Scripts\Activate.ps1
+.\venv\Scripts\Activate.ps1
 cd mcp_server
 $env:PYTHONPATH="..\python"; python mcp_http_server.py
 ```

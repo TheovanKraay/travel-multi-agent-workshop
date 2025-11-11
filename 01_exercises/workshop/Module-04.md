@@ -2077,20 +2077,48 @@ With all intelligent memory features implemented, it's time to test the system e
 
 ### Restart All Services
 
-Since we've added new tools and agent logic, close all your existing terminal windows and open new ones to restart all services and load the changes.
+Since we've added new tools and agent logic, we need to restart all services to load the changes.
 
 **Terminal 1 (MCP Server):**
 
-```shell
-cd multi-agent-workshop\01_exercises
-venv\Scripts\Activate.ps1
+Stop the currently running MCP server (press `Ctrl+C`), then restart it:
+
+> **Important**: Always ensure your virtual environment is activated!
+
+**Linux/Mac/WSL/Codespaces:**
+
+```bash
+cd multi-agent-workshop/01_exercises
+source venv/bin/activate
 cd mcp_server
-$env:PYTHONPATH="../python"; python mcp_http_server.py
+PYTHONPATH="../python" python mcp_http_server.py
+```
+
+**Windows (PowerShell/CMD):**
+
+```powershell
+cd multi-agent-workshop\01_exercises
+.\venv\Scripts\Activate.ps1
+cd mcp_server
+$env:PYTHONPATH="..\python"; python mcp_http_server.py
 ```
 
 **Terminal 2 (Backend API):**
 
-```shell
+Stop the currently running backend (press `Ctrl+C`), then restart it:
+
+**Linux/Mac/WSL/Codespaces:**
+
+```bash
+cd multi-agent-workshop/01_exercises
+source venv/bin/activate
+cd python
+uvicorn src.app.travel_agents_api:app --reload --host 0.0.0.0 --port 8000
+```
+
+**Windows (PowerShell/CMD):**
+
+```powershell
 cd multi-agent-workshop\01_exercises
 .\venv\Scripts\Activate.ps1
 cd python
@@ -2099,8 +2127,14 @@ uvicorn src.app.travel_agents_api:app --reload --host 0.0.0.0 --port 8000
 
 **Terminal 3 (Frontend):**
 
-```shell
-cd multi-agent-workshop\01_exercises/frontend
+Stop the currently running frontend (press `Ctrl+C`), then restart it:
+
+> **Note**: The frontend doesn't require virtual environment activation since it uses Node.js.
+
+**All Platforms:**
+
+```bash
+cd multi-agent-workshop/01_exercises/frontend
 npm start
 ```
 

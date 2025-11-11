@@ -1406,18 +1406,34 @@ With the activities in this module complete, it is time to test your work!
 
 Since we added new tools to the MCP server, we need to restart it to load the changes. The backend API and frontend will automatically reload thanks to watchfiles.
 
-**In Terminal with MCP Server:**
+**In Terminal 1 (MCP Server):**
 
-1. Press `Ctrl + C` to stop the MCP server
-2. Restart it with:
+1. Stop the currently running MCP server (press `Ctrl+C` in the terminal)
+2. Restart it with the commands below:
+
+> **Important**: Always ensure your virtual environment is activated before starting the server!
+
+**Linux/Mac/WSL/Codespaces:**
 
 ```bash
-$env:PYTHONPATH="../python"; python mcp_http_server.py
+cd multi-agent-workshop/01_exercises
+source venv/bin/activate
+cd mcp_server
+PYTHONPATH="../python" python mcp_http_server.py
 ```
 
-**Backend API Terminal** - No action needed. Watchfiles will auto-reload changes.
+**Windows (PowerShell/CMD):**
 
-**Frontend Terminal** - No action needed. Angular dev server auto-reloads.
+```powershell
+cd multi-agent-workshop\01_exercises
+.\venv\Scripts\Activate.ps1
+cd mcp_server
+$env:PYTHONPATH="..\python"; python mcp_http_server.py
+```
+
+**Backend API (Terminal 2)** - No action needed. Watchfiles will auto-reload changes.
+
+**Frontend (Terminal 3)** - No action needed. Angular dev server auto-reloads.
 
 Open your browser to http://localhost:4200 and start a new conversation (you may need to log out and log back in to reset the session):
 
