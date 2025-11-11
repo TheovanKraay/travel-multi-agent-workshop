@@ -140,8 +140,13 @@ export class ExploreComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.travelApi.getThreadMessages(threadId).subscribe({
           next: (messages) => {
             console.log('Loaded existing messages:', messages);
-            // Sort messages by timestamp ascending (oldest first)
-            this.messages = messages.sort((a: any, b: any) => {
+            // Map backend response to frontend Message format
+            this.messages = messages.map((msg: any) => ({
+              role: msg.sender?.toLowerCase() || msg.role?.toLowerCase() || 'assistant',
+              content: msg.text || msg.content || '',
+              timestamp: msg.timeStamp || msg.timestamp || new Date().toISOString(),
+              metadata: msg.metadata
+            })).sort((a: any, b: any) => {
               const timeA = new Date(a.timestamp || 0).getTime();
               const timeB = new Date(b.timestamp || 0).getTime();
               return timeA - timeB;

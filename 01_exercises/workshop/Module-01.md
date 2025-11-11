@@ -22,6 +22,18 @@ In this Module, you'll implement your first agent as part of a multi-agent trave
 
 This solution is organized in the folders below:
 
+Open PowerShell and navigate to the workshop `\multi-agent-workshop\01_exercises` directory:
+
+```powershell
+cd multi-agent-workshop\01_exercises
+```
+
+Open Visual Studio Code with our project loaded:
+
+```powershell
+code .
+```
+
 - **/python** The main Python application folder
   - **/data** Contains seed data files for hotels, restaurants, activities, and users
     - **seed_data.py** Script to populate Cosmos DB with initial data
@@ -42,6 +54,7 @@ This solution is organized in the folders below:
       - **azure_open_ai.py** Azure OpenAI integration
 - **/mcp_server** Model Context Protocol server implementation
   - **mcp_http_server.py** HTTP server for MCP integration
+- **/fronted** Frontend App for the Travel Assistant
 
 Here is what the structure of this solution appears like in VS Code. Spend a few moments to familiarize yourself with the structure as it will help you navigate as we go through the activities.
 
@@ -153,11 +166,15 @@ PROMPT_DIR = os.path.join(os.path.dirname(__file__), 'prompts')
 
 # load prompts
 
+
 # global variables
+
 
 # define agents & tools
 
+
 # define functions
+
 
 # define workflow
 
@@ -410,6 +427,11 @@ from typing import Any, Dict, List, Optional
 from dotenv import load_dotenv
 from mcp.server.fastmcp import FastMCP
 
+# Add python directory to path so we can import src modules
+current_dir = os.path.dirname(os.path.abspath(__file__))
+python_dir = os.path.join(current_dir, '..', 'python')
+sys.path.insert(0, python_dir)
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -590,6 +612,7 @@ itinerary_generator_tools = []
 ```
 
 Below the `orchestrator_agent`, copy the following:
+
 ```python
 itinerary_generator_agent = create_react_agent(
         model,
@@ -900,13 +923,21 @@ if __name__ == "__main__":
 
 For the rest of the lab, we're going to be testing using the front end by wiring up the API layer, so you can skip to that section below. But for reference, if you wanted bypass the front end and test the backend in a command line fashion, you could run the below:
 
+**First, navigate to the python directory and activate your virtual environment:**
+
 **Linux/Mac/WSL/Codespaces:**
-```shell
+
+```bash
+cd multi-agent-workshop/01_exercises/python
+source ../venv/bin/activate
 python -m src.app.travel_agents
 ```
 
 **Windows (PowerShell):**
+
 ```powershell
+cd multi-agent-workshop\01_exercises\python
+..\venv\Scripts\Activate.ps1
 python -m src.app.travel_agents
 ```
 
@@ -919,16 +950,25 @@ To test your travel agent system, you need to start two components in separate t
 
 Open a **first terminal window** and run the following commands:
 
-**Windows(PowerShell/CMD):**
+> **Important**: Always ensure your virtual environment is activated before starting any server!
+
+**Linux/Mac/WSL/Codespaces:**
+
+```bash
+cd multi-agent-workshop/01_exercises
+source venv/bin/activate
+cd mcp_server
+PYTHONPATH="../python" python mcp_http_server.py
+```
+
+**Windows (PowerShell/CMD):**
 
 ```powershell
 cd multi-agent-workshop\01_exercises
-venv\Scripts\Activate.ps1
+.\venv\Scripts\Activate.ps1
 cd mcp_server
 $env:PYTHONPATH="../python"; python mcp_http_server.py
 ```
-
-
 
 You should see output similar to:
 
@@ -953,24 +993,26 @@ INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
 ```
 
-
 ### Wiring up the API layer
 
 Now let's set up the API layer so that the front end can talk properly to your new agents.
 
 The travel assistant uses a **FastAPI** backend that exposes REST endpoints for the Angular frontend. The API layer acts as a bridge between the web interface and your LangGraph multi-agent system.
 
+Navigate to the `travel_agents_api.py` file:
+
 First, locate this line and uncomment it:
 
 ```python
 #from src.app.travel_agents import setup_agents, build_agent_graph, cleanup_persistent_session
 ```
+
 Next, find the following two commented out functions and uncomment them:
 
-- initialize_agents
-- ensure_agents_initialized
+- **initialize_agents**
+- **ensure_agents_initialized**
 
-Lastly, find the below code, comment it out, and uncomment the fully implemented version above it.
+Lastly, find the below code, comment it out, and uncomment the fully implemented version below it.
 
 ```python
 @app.post(
@@ -1016,8 +1058,18 @@ You need to have **three components** running simultaneously:
 
 #### Start the Backend API Server
 
-The backend API server should still be running from when you started in a terminal in module 00. You also started it with `--reload`, so it should automatically restart on code changes (you should see warnings like "WatchFiles detected changes"). Check it is still running. If it's not running, or you prefer to restart a fresh instance, open a **new terminal window** (keep the MCP server running) and execute:
+The backend API server should still be running from when you started it in a terminal in Module 00. You also started it with `--reload`, so it should automatically restart on code changes (you should see warnings like "WatchFiles detected changes"). Check if it is still running. If it's not running, or you prefer to restart a fresh instance, open a **new terminal window** (keep the MCP server running) and execute:
 
+> **Important**: Always ensure your virtual environment is activated before starting the server!
+
+**Linux/Mac/WSL/Codespaces:**
+
+```bash
+cd multi-agent-workshop/01_exercises
+source venv/bin/activate
+cd python
+uvicorn src.app.travel_agents_api:app --reload --host 0.0.0.0 --port 8000
+```
 
 **Windows (PowerShell/CMD):**
 
@@ -1059,12 +1111,22 @@ INFO:     Application startup complete.
 
 The API server is now running on http://localhost:8000
 
- #### Start the Frontend Application
+#### Start the Frontend Application
 
-Your frontend should be already be started from module 00. If you closed it, open a new terminal window and execute:
+Your frontend should already be started from Module 00. If you closed it, open a **new terminal window** and execute:
 
+> **Note**: The frontend doesn't require virtual environment activation since it uses Node.js, not Python.
+
+**Linux/Mac/WSL/Codespaces:**
+
+```bash
+cd multi-agent-workshop/01_exercises/frontend
+npm install  # Only needed first time or when dependencies change
+npm start
+```
 
 **Windows (PowerShell/CMD):**
+
 ```powershell
 cd multi-agent-workshop\01_exercises\frontend
 npm install  # Only needed first time or when dependencies change
@@ -1096,7 +1158,6 @@ You should now have **four terminals** with these processes:
 | 2        | Backend API | 8000 | `uvicorn src.app.travel_agents_api:app ...` |
 | 3        | Frontend    | 4200 | `npm start`                                 |
 
-
 ### Start a Conversation
 
 1. Return to the frontend app in your browser and hit refresh. If you closed it, open a new tab and navigate to <http://localhost:4200/>.
@@ -1123,21 +1184,25 @@ Your implementation is successful if:
 ## Common Issue and Troubleshooting
 
 **Issue: Frontend can't connect to backend**
+
 - Verify backend API is running on port 8000
 - Check `frontend/proxy.conf.json` has correct API proxy configuration
 - Look for CORS errors in browser console
 
 **Issue: Backend can't connect to MCP server**
+
 - Verify MCP server is running on port 8080
 - Check `.env` file has `MCP_SERVER_BASE_URL=http://localhost:8080`
 - Verify `MCP_AUTH_TOKEN` is set correctly
 
 **Issue: npm install fails**
+
 - Ensure Node.js version 18+ is installed: `node --version`
 - Clear npm cache: `npm cache clean --force`
 - Delete `node_modules` and `package-lock.json`, then retry
 
 **Issue: Port already in use**
+
 - Find process using port: `lsof -i :8000` (macOS/Linux) or `netstat -ano | findstr :8000` (Windows)
 - Kill the process or use a different port
 
@@ -1416,6 +1481,11 @@ import logging
 import json
 from dotenv import load_dotenv
 from mcp.server.fastmcp import FastMCP
+
+# Add python directory to path so we can import src modules
+current_dir = os.path.dirname(os.path.abspath(__file__))
+python_dir = os.path.join(current_dir, '..', 'python')
+sys.path.insert(0, python_dir)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -1726,9 +1796,3 @@ In this module, you:
 ### What's Next?
 
 Proceed to Module 02: [Agent Specialization](./Module-02.md)
-
-
-
-
-
-

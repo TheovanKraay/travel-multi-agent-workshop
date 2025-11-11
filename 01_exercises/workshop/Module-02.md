@@ -621,7 +621,7 @@ Below the hybrid search tool, add the following tools:
 
 ```python
 # ============================================================================
-# 5. Trip Management Tools
+# 3. Trip Management Tools
 # ============================================================================
 
 @mcp.tool()
@@ -736,7 +736,7 @@ Below the trip tools, add the following tools:
 
 ```python
 # ============================================================================
-# 1. Session Management Tools
+# 4. Session Management Tools
 # ============================================================================
 
 @mcp.tool()
@@ -1406,18 +1406,34 @@ With the activities in this module complete, it is time to test your work!
 
 Since we added new tools to the MCP server, we need to restart it to load the changes. The backend API and frontend will automatically reload thanks to watchfiles.
 
-**In Terminal with MCP Server:**
+**In Terminal 1 (MCP Server):**
 
-1. Press `Ctrl + C` to stop the MCP server
-2. Restart it with:
+1. Stop the currently running MCP server (press `Ctrl+C` in the terminal)
+2. Restart it with the commands below:
+
+> **Important**: Always ensure your virtual environment is activated before starting the server!
+
+**Linux/Mac/WSL/Codespaces:**
 
 ```bash
-$env:PYTHONPATH="../python"; python mcp_http_server.py
+cd multi-agent-workshop/01_exercises
+source venv/bin/activate
+cd mcp_server
+PYTHONPATH="../python" python mcp_http_server.py
 ```
 
-**Backend API Terminal** - No action needed. Watchfiles will auto-reload changes.
+**Windows (PowerShell/CMD):**
 
-**Frontend Terminal** - No action needed. Angular dev server auto-reloads.
+```powershell
+cd multi-agent-workshop\01_exercises
+.\venv\Scripts\Activate.ps1
+cd mcp_server
+$env:PYTHONPATH="..\python"; python mcp_http_server.py
+```
+
+**Backend API (Terminal 2)** - No action needed. Watchfiles will auto-reload changes.
+
+**Frontend (Terminal 3)** - No action needed. Angular dev server auto-reloads.
 
 Open your browser to http://localhost:4200 and start a new conversation (you may need to log out and log back in to reset the session):
 
@@ -2062,17 +2078,6 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 python_dir = os.path.join(current_dir, '..', 'python')
 sys.path.insert(0, python_dir)
 
-from src.app.services.azure_cosmos_db import (
-    create_session_record,
-    get_session_by_id,
-    get_session_messages,
-    get_session_summaries,
-    query_places_hybrid,
-    create_trip,
-    get_trip,
-    trips_container
-)
-
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -2102,6 +2107,17 @@ logging.getLogger("src.app.services.azure_cosmos_db").setLevel(logging.WARNING)
 
 # Prompt directory
 PROMPT_DIR = os.path.join(os.path.dirname(__file__), '..', 'python', 'src', 'app', 'prompts')
+
+from src.app.services.azure_cosmos_db import (
+    create_session_record,
+    get_session_by_id,
+    get_session_messages,
+    get_session_summaries,
+    query_places_hybrid,
+    create_trip,
+    get_trip,
+    trips_container
+)
 
 # Load environment variables
 try:

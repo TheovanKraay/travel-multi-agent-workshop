@@ -886,6 +886,41 @@ def process_messages_background(message_tuples: List[tuple], userId: str, tenant
         logger.error(f"Error storing messages: {e}")
 
 
+@app.post(
+    "/tenant/{tenantId}/user/{userId}/sessions/{sessionId}/completion",
+    tags=[CHAT_TAG],
+    summary="Chat Completion",
+    description="Send a message and get AI agent response (main chat endpoint)",
+    response_model=List[MessageModel]
+)
+async def get_chat_completion(
+        tenantId: str,
+        userId: str,
+        sessionId: str,
+        background_tasks: BackgroundTasks,
+        request_body: str = Body(..., media_type="application/json")
+):
+    """
+    Simple stub for chat completion - not yet implemented.
+    """
+    return [
+        MessageModel(
+            id=str(uuid.uuid4()),
+            type="message",
+            sessionId=sessionId,
+            tenantId=tenantId,
+            userId=userId,
+            timeStamp=datetime.utcnow().isoformat(),
+            sender="Assistant",
+            senderRole="Assistant",
+            text="Chat completion not implemented yet",
+            debugLogId="",
+            tokensUsed=0,
+            rating=None
+        )
+    ]
+
+
 # @app.post(
 #     "/tenant/{tenantId}/user/{userId}/sessions/{sessionId}/completion",
 #     tags=[CHAT_TAG],
@@ -1003,41 +1038,6 @@ def process_messages_background(message_tuples: List[tuple], userId: str, tenant
 #         import traceback
 #         logger.error(traceback.format_exc())
 #         raise HTTPException(status_code=500, detail=f"Chat completion failed: {str(e)}")
-
-
-@app.post(
-    "/tenant/{tenantId}/user/{userId}/sessions/{sessionId}/completion",
-    tags=[CHAT_TAG],
-    summary="Chat Completion",
-    description="Send a message and get AI agent response (main chat endpoint)",
-    response_model=List[MessageModel]
-)
-async def get_chat_completion(
-        tenantId: str,
-        userId: str,
-        sessionId: str,
-        background_tasks: BackgroundTasks,
-        request_body: str = Body(..., media_type="application/json")
-):
-    """
-    Simple stub for chat completion - not yet implemented.
-    """
-    return [
-        MessageModel(
-            id=str(uuid.uuid4()),
-            type="message",
-            sessionId=sessionId,
-            tenantId=tenantId,
-            userId=userId,
-            timeStamp=datetime.utcnow().isoformat(),
-            sender="Assistant",
-            senderRole="Assistant",
-            text="Chat completion not implemented yet",
-            debugLogId="",
-            tokensUsed=0,
-            rating=None
-        )
-    ]
 
 
 @app.post(

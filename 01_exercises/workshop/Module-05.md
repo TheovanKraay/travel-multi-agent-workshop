@@ -790,7 +790,60 @@ TODO: Add image here
 
 ### Step 3: Run Test Scenarios
 
-Open another terminal window to send test requests. We'll run four test scenarios that demonstrate different aspects of your multi-agent system.
+Now we'll run test scenarios to generate traces. Make sure all three services are running (MCP server, backend API, and frontend).
+
+If any service isn't running, start them as follows:
+
+**Terminal 1 (MCP Server):**
+
+**Linux/Mac/WSL/Codespaces:**
+
+```bash
+cd multi-agent-workshop/01_exercises
+source venv/bin/activate
+cd mcp_server
+PYTHONPATH="../python" python mcp_http_server.py
+```
+
+**Windows (PowerShell/CMD):**
+
+```powershell
+cd multi-agent-workshop\01_exercises
+.\venv\Scripts\Activate.ps1
+cd mcp_server
+$env:PYTHONPATH="..\python"; python mcp_http_server.py
+```
+
+**Terminal 2 (Backend API):**
+
+**Linux/Mac/WSL/Codespaces:**
+
+```bash
+cd multi-agent-workshop/01_exercises
+source venv/bin/activate
+cd python
+uvicorn src.app.travel_agents_api:app --reload --host 0.0.0.0 --port 8000
+```
+
+**Windows (PowerShell/CMD):**
+
+```powershell
+cd multi-agent-workshop\01_exercises
+.\venv\Scripts\Activate.ps1
+cd python
+uvicorn src.app.travel_agents_api:app --reload --host 0.0.0.0 --port 8000
+```
+
+**Terminal 3 (Frontend):**
+
+**All Platforms:**
+
+```bash
+cd multi-agent-workshop/01_exercises/frontend
+npm start
+```
+
+Once all services are running, open your browser to http://localhost:4200 and interact with the travel assistant to generate traces.
 
 #### Test Scenario 1: Memory Extraction Trace
 

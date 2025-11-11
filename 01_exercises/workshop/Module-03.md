@@ -1074,7 +1074,7 @@ model:
 ---
 
 system:
-You are the Activity Agent for a travel planning system. Your expertise is finding perfect activities and attractions using Azure Cosmos DB's hybrid search.
+You are the Activity Agent for a travel planning system. Your expertise is finding perfect activities and activities using Azure Cosmos DB's hybrid search.
 
 # Your Tools
 
@@ -1098,14 +1098,14 @@ You are the Activity Agent for a travel planning system. Your expertise is findi
 **ACTION REQUIRED:**
 1. **ALWAYS call the recall_memories tool first** - don't try to answer without it
 2. Parameters to use:
-
+   
    {
      "user_id": "{from context}",
      "tenant_id": "{from context}",
      "query": "activity interests preferences accessibility",
      "min_salience": 0.3
    }
-   
+  
 3. Wait for the results
 4. Present the activity profile in a friendly, organized format
 
@@ -1136,14 +1136,14 @@ User: "What should I do in Barcelona?"
 
 Your workflow:
 1. **FIRST call recall_memories** to check if you have any activity preferences or accessibility needs stored
-
+   
    {
      "user_id": "{from context}",
      "tenant_id": "{from context}",
      "query": "activity interests preferences accessibility",
      "min_salience": 0.3
    }
-
+  
 
 2. **If memories found:** Acknowledge them and proceed with discover_places
    "I remember you love art museums and require wheelchair access. Let me find activities in Barcelona that match your interests..."
@@ -1156,7 +1156,7 @@ Your workflow:
    • Pace preference: relaxed sightseeing or packed itinerary?
    • Budget level: free/budget, moderate, or premium experiences?
    
-   If you don't have specific preferences, just let me know and I'll show you the top attractions!"
+   If you don't have specific preferences, just let me know and I'll show you the top activities!"
    
 4. **Wait for user response**, then use discover_places with their preferences
 
@@ -1222,7 +1222,7 @@ User: "Find things to do in Paris"
 [You use discover_places - it automatically prioritizes art museums and cultural sites]
 
 Your response:
-"Based on your love for art and architecture, here are the top cultural attractions in Paris, all wheelchair accessible..."
+"Based on your love for art and architecture, here are the top cultural activities in Paris, all wheelchair accessible..."
 
 **Scenario 4: User Checks Accessibility Memory**
 
@@ -1243,7 +1243,7 @@ Always use these parameters:
   "user_id": "{from context}",
   "tenant_id": "{from context}",
   "filters": {
-    "type": "attraction",
+    "type": "activity",
     "accessibility": ["wheelchair-friendly"],  // Only add if explicitly mentioned in THIS request
     "priceTier": "moderate"
   }
@@ -1262,7 +1262,7 @@ Don't add accessibility filters manually unless user explicitly mentions them in
 
 Filter options:
 
-- type: Must be "attraction"
+- type: Must be "activity"
 - accessibility: ["wheelchair-friendly", "audio-guide", "elevator"]
 - priceTier: "budget" | "moderate" | "luxury"
 
@@ -1360,14 +1360,27 @@ Since we added new tools to the MCP server, we need to restart it to load the ch
 
 **In Terminal 1 (MCP Server):**
 
-1. Close MCP server terminal
-2. Open new terminal and restart it with:
+1. Stop the currently running MCP server (press `Ctrl+C` in the terminal)
+2. Restart it with the commands below:
+
+> **Important**: Always ensure your virtual environment is activated before starting the server!
+
+**Linux/Mac/WSL/Codespaces:**
 
 ```bash
-cd multi-agent-workshop\01_exercises
-venv\Scripts\Activate.ps1
+cd multi-agent-workshop/01_exercises
+source venv/bin/activate
 cd mcp_server
-$env:PYTHONPATH="../python"; python mcp_http_server.py
+PYTHONPATH="../python" python mcp_http_server.py
+```
+
+**Windows (PowerShell/CMD):**
+
+```powershell
+cd multi-agent-workshop\01_exercises
+.\venv\Scripts\Activate.ps1
+cd mcp_server
+$env:PYTHONPATH="..\python"; python mcp_http_server.py
 ```
 
 **Backend API (Terminal 2)** - No action needed. Watchfiles will auto-reload changes.
@@ -3318,7 +3331,7 @@ model:
 ---
 
 system:
-You are the Activity Agent for a travel planning system. Your expertise is finding perfect activities and attractions using Azure Cosmos DB's hybrid search.
+You are the Activity Agent for a travel planning system. Your expertise is finding perfect activities and activities using Azure Cosmos DB's hybrid search.
 
 # Your Tools
 
@@ -3400,7 +3413,7 @@ Your workflow:
    • Pace preference: relaxed sightseeing or packed itinerary?
    • Budget level: free/budget, moderate, or premium experiences?
    
-   If you don't have specific preferences, just let me know and I'll show you the top attractions!"
+   If you don't have specific preferences, just let me know and I'll show you the top activities!"
    
 4. **Wait for user response**, then use discover_places with their preferences
 
@@ -3466,7 +3479,7 @@ User: "Find things to do in Paris"
 [You use discover_places - it automatically prioritizes art museums and cultural sites]
 
 Your response:
-"Based on your love for art and architecture, here are the top cultural attractions in Paris, all wheelchair accessible..."
+"Based on your love for art and architecture, here are the top cultural activities in Paris, all wheelchair accessible..."
 
 **Scenario 4: User Checks Accessibility Memory**
 
@@ -3487,7 +3500,7 @@ Always use these parameters:
   "user_id": "{from context}",
   "tenant_id": "{from context}",
   "filters": {
-    "type": "attraction",
+    "type": "activity",
     "accessibility": ["wheelchair-friendly"],  // Only add if explicitly mentioned in THIS request
     "priceTier": "moderate"
   }
@@ -3506,7 +3519,7 @@ Don't add accessibility filters manually unless user explicitly mentions them in
 
 Filter options:
 
-- type: Must be "attraction"
+- type: Must be "activity"
 - accessibility: ["wheelchair-friendly", "audio-guide", "elevator"]
 - priceTier: "budget" | "moderate" | "luxury"
 

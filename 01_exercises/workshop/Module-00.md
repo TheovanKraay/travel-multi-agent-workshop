@@ -51,104 +51,14 @@ You should see `(venv)` appear in your terminal prompt, indicating the virtual e
 > Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 > ```
 
-## Activity 2: Seed the Database
+## Activity 2: Start the API Server
 
-Now that your environment is set up, let's populate Cosmos DB with the initial dataset.
-
-> **Note:** The Cosmos DB database and containers have already been created as part of the Azure infrastructure deployment.
-
-### Step 1: Navigate to the Data Directory
-
-```powershell
-cd python\data
-```
-
-### Step 2: Run the Seed Script
-
-Execute the seed data script to load users, places, and memories:
-
-```powershell
-python seed_data.py
-```
-
-### What This Script Does
-
-The `seed_data.py` script performs the following operations:
-
-1. **Connects to the existing database**: `TravelAssistant`
-2. **Verifies containers** are ready:
-
-   - `Sessions` - Chat session metadata
-   - `Messages` - Chat messages
-   - `Summaries` - Conversation summaries
-   - `Memories` - User preferences
-   - `Places` - Hotels, restaurants, and activities
-   - `Trips` - Trip itineraries
-   - `Users` - User profiles
-   - `ApiEvents` - API call logs
-   - `Checkpoints` - LangGraph state
-   - `Debug` - Chat completion logs
-
-3. **Seeds initial data**:
-
-   - **Users**: 4 users (Tony Stark, Steve Rogers, Natasha Romanoff, Bruce Banner)
-   - **Places**: ~2,900 places across 35 cities (hotels, restaurants, activities)
-   - **Memories**: 10 pre-existing memories for Tony and Steve
-
-4. **Generates embeddings** for memories and places using Azure OpenAI
-
-### Expected Output
-
-You should see output similar to:
-
-```
-📝 DATA SEEDING (CONCURRENT MODE)
-
-🗄️  Connecting to database: TravelAssistant
-✅ Database ready
-
-📦 Verifying containers...
-✅ Container ready: Sessions
-✅ Container ready: Messages
-✅ Container ready: Summaries
-✅ Container ready: Memories
-✅ Container ready: Places
-✅ Container ready: Trips
-✅ Container ready: Users
-✅ Container ready: ApiEvents
-✅ Container ready: Checkpoints
-✅ Container ready: Debug
-
-👤 Seeding USERS...
-   ✅ Seeded 4 users
-
-🧠 Seeding MEMORIES...
-   ✅ Seeded 10 memories with embeddings
-
-🏨 Seeding PLACES...
-   ✅ Seeding complete
-   📊 Total places seeded: 2,937
-
-✈️  Seeding TRIPS...
-   ✅ Seeded 5 trips
-
-✅ ALL DATA SEEDED SUCCESSFULLY
-```
-
-> **Note:** The seeding process may take 5-10 minutes due to embedding generation for ~2,900 places.
-
----
-
-## Activity 3: Start the API Server
-
-With the database seeded, let's start the backend API server.
+Let's start the backend API server.
 
 ### Step 1: Navigate to the Source Directory
 
-From the `data` directory, navigate to the source directory:
-
 ```powershell
-cd ..\src\app
+cd .\python\src\app
 ```
 
 ### Step 2: Start the API Server with Uvicorn
@@ -180,8 +90,8 @@ INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
 
 Open your browser and navigate to:
 
-- **API Documentation**: http://localhost:8000/docs
-- **Health Check**: http://localhost:8000/health
+- **API Documentation**: `http://localhost:8000/docs`
+- **Health Check**: `http://localhost:8000/health`
 
 You should see the FastAPI Swagger UI with all available endpoints.
 
@@ -251,7 +161,7 @@ Build at: 2025-11-05T12:00:00.000Z - Hash: xxxxx
 
 Open your browser and navigate to:
 
-**http://localhost:4200**
+`http://localhost:4200`
 
 ---
 

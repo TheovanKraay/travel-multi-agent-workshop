@@ -2077,20 +2077,48 @@ With all intelligent memory features implemented, it's time to test the system e
 
 ### Restart All Services
 
-Since we've added new tools and agent logic, close all your existing terminal windows and open new ones to restart all services and load the changes.
+Since we've added new tools and agent logic, we need to restart all services to load the changes.
 
 **Terminal 1 (MCP Server):**
 
-```shell
-cd multi-agent-workshop\01_exercises
-venv\Scripts\Activate.ps1
+Stop the currently running MCP server (press `Ctrl+C`), then restart it:
+
+> **Important**: Always ensure your virtual environment is activated!
+
+**Linux/Mac/WSL/Codespaces:**
+
+```bash
+cd multi-agent-workshop/01_exercises
+source venv/bin/activate
 cd mcp_server
-$env:PYTHONPATH="../python"; python mcp_http_server.py
+PYTHONPATH="../python" python mcp_http_server.py
+```
+
+**Windows (PowerShell/CMD):**
+
+```powershell
+cd multi-agent-workshop\01_exercises
+.\venv\Scripts\Activate.ps1
+cd mcp_server
+$env:PYTHONPATH="..\python"; python mcp_http_server.py
 ```
 
 **Terminal 2 (Backend API):**
 
-```shell
+Stop the currently running backend (press `Ctrl+C`), then restart it:
+
+**Linux/Mac/WSL/Codespaces:**
+
+```bash
+cd multi-agent-workshop/01_exercises
+source venv/bin/activate
+cd python
+uvicorn src.app.travel_agents_api:app --reload --host 0.0.0.0 --port 8000
+```
+
+**Windows (PowerShell/CMD):**
+
+```powershell
 cd multi-agent-workshop\01_exercises
 .\venv\Scripts\Activate.ps1
 cd python
@@ -2099,8 +2127,14 @@ uvicorn src.app.travel_agents_api:app --reload --host 0.0.0.0 --port 8000
 
 **Terminal 3 (Frontend):**
 
-```shell
-cd multi-agent-workshop\01_exercises/frontend
+Stop the currently running frontend (press `Ctrl+C`), then restart it:
+
+> **Note**: The frontend doesn't require virtual environment activation since it uses Node.js.
+
+**All Platforms:**
+
+```bash
+cd multi-agent-workshop/01_exercises/frontend
 npm start
 ```
 
@@ -2110,9 +2144,9 @@ npm start
 
 **Steps**:
 
-1. Start a new conversation in the frontend (be sure to sign in as user "Tony")
-2. Send: "Hi, I'm planning a trip to Tokyo"
-3. Send: "I don't eat meat and I need wheelchair-accessible restaurants"
+1. Start a new conversation in the frontend (be sure to sign in as user "Peter" or "Bruce" as they don't have any pre-loaded memories)
+2. Send: `Hi, I'm planning a trip to Tokyo`
+3. Send: `I don't eat meat and I need wheelchair-accessible restaurants`
 4. Open Azure Data Explorer (Cosmos DB)
 5. Query the `Memories` container:
    ```sql
@@ -2141,7 +2175,7 @@ npm start
 **Steps:**
 
 - Continue the conversation from Test 1
-- Send: "Actually, I love steak and seafood"
+- Send: `Actually, I love steak and seafood`
 - Observe the agent's response
 
 **Chat Assistant Result**
@@ -2161,10 +2195,10 @@ npm start
 
 **Steps:**
 
-- Start a new conversation (log out and back in as Tony)
-- Send: "I'm vegan"
+- Start a new conversation (log out and back in as Peter/Bruce, the user you choose before)
+- Send: `I'm vegan`
 - Wait for memory to be stored
-- Send: "I'm also gluten-free"
+- Send: `I'm also gluten-free`
 - Check Cosmos DB Memories container
 
 **Chat Assistant Result**
@@ -2185,10 +2219,10 @@ npm start
 
 **Steps:**
 
-- Start a new conversation
-- Send: "I usually stay at budget hotels"
+- Start a new conversation (log out and back in as Peter/Bruce, the user you choose before)
+- Send: `I usually stay at budget hotels`
 - Wait for memory to be stored (check DB)
-- Send: "Actually, I prefer moderate hotels now"
+- Send: `Actually, I prefer moderate hotels now`
 - Check Cosmos DB for both memories
 
 **Chat Assistant Result**
@@ -2201,9 +2235,9 @@ npm start
 
 **Steps:**
 
-- Start a new conversation
-- Send: "I usually prefer budget hotels"
-- Send: "For this Paris trip, I want luxury accommodations"
+- Start a new conversation (log out and back in as Peter/Bruce, the user you choose before)
+- Send: `I usually prefer budget hotels`
+- Send: `For this Paris trip, I want luxury accommodations`
 - Check Cosmos DB memories
 
 **Chat Assistant Result**
@@ -2224,11 +2258,11 @@ npm start
 
 **Steps:**
 
-- Start a new conversation (log out and back in as Tony)
-- Send: "Hello!"
-- Send: "Yes"
-- Send: "Thanks"
-- Check backend logs or DB for extraction calls
+- Start a new conversation (log out and back in as Peter/Bruce, the user you choose before)
+- Send: `Hello!`
+- Send: `Yes`
+- Send: `Thanks`
+- Check backend or mcp server logs for extraction calls
 
 **Expected Results:**
 
@@ -2246,17 +2280,17 @@ npm start
 
 **Steps:**
 
-- Start a new conversation
-- Send 12 messages in sequence:
-  - "Hi, I'm planning a trip to Paris"
-  - "Find hotels in Paris"
-  - "I want luxury hotels"
-  - "Find restaurants"
-  - "Show me vegetarian options"
-  - "What about activities?"
-  - "Find historic places"
-  - "Create an itinerary for 3 days now."
-  - "That looks great! What else can you recommend?" (10th message - triggers summarization)
+- Start a new conversation (log out and back in as Peter/Bruce, **the user you didn't choose before**)
+- Send 10 messages in sequence(This list is just for reference, you can send different messages):
+  - `Hi, I'm planning a trip to Paris`
+  - `Find hotels in Paris`
+  - `I want luxury hotels`
+  - `Find restaurants`
+  - `Show me vegetarian options`
+  - `What about activities?`
+  - `Find historic places`
+  - `Create an itinerary for 3 days now.`
+  - `That looks great! What else can you recommend?` (10th message - triggers summarization)
 - After the 10th message, observe:
   - Backend logs for "Auto-routing to summarizer"
   - Cosmos DB Summaries container
